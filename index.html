@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LINE Login 純前端示範（LIFF）</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="head">
+      <p class="eyebrow">LIFF · 純靜態</p>
+      <h1>LINE 登入示範</h1>
+      <p class="lede">
+        這一頁沒有任何後端：登入由 LINE 平台完成，前端只拿
+        <code>liff.getProfile()</code> 與 <code>liff.getDecodedIDToken()</code>。
+        對照組是本機 <code>linelogin</code> 那套 FastAPI + <code>client_secret</code> 的版本。
+      </p>
+    </header>
+
+    <!-- 狀態列 -->
+    <section class="status-bar">
+      <span id="badge-env" class="pill pill-idle">尚未初始化</span>
+      <span id="badge-liff" class="pill pill-idle">LIFF ID 未設定</span>
+    </section>
+
+    <!-- 1. 沒填 LIFF ID -->
+    <section id="card-setup" class="card is-hidden">
+      <h2><span class="dot dot-red"></span>還缺 LIFF ID</h2>
+      <p>
+        <code>config.js</code> 裡的 <code>LIFF_ID</code> 是空的。這一頁要能登入，
+        必須先到 LINE Developers Console 建一個 LIFF app，再把它的 LIFF ID 填進來。
+      </p>
+      <ol class="steps">
+        <li>LINE Developers Console → 你的 LINE Login channel → <b>LIFF</b> 分頁 → <b>Add L</b></li>
+        <li>
+          <b>Endpoint URL</b> 填
+          <code id="expected-endpoint">https://&lt;你的帳號&gt;.github.io/&lt;repo&gt;/</code>
+          （必須 HTTPS、不能是 localhost，且要覆蓋這一頁的路徑）
+        </li>
+        <li><b>Scope</b> 勾 <code>profile</code> 與 <code>openid</code>（少了就拿不到名字或 ID token）</li>
+        <li>Size 選 <b>Full</b>（或 Tall），建立後複製 <b>LIFF ID</b>（格式 <code>1234567890-AbCdEfgh</code>）</li>
+        <li>把 LIFF ID 填進 <code>config.js</code>，commit 後等 Pages 重新部署</li>
+      </ol>
+      <p class="hint">
+        臨時測試也可以直接在網址後面加 <code>?liffId=你的LIFF_ID</code>，不用改檔案
+        （該網址仍必須在 Endpoint URL 之下）。
+      </p>
+    </section>
+
+    <!-- 2. 未登入 -->
+    <section id="card-login" class="card is-hidden">
+      <h2><span class="dot dot-amber"></span>尚未登入</h2>
+      <p id="login-note">按下面的按鈕，會跳到 LINE 的帳號驗證畫面。</p>
+      <button id="btn-login" type="button" class="btn btn-line">
+        <span class="btn-dot"></span>使用 LINE 登入
+      </button>
+    </section>
+
+    <!-- 3. 已登入 -->
+    <section id="card-profile" class="card is-hidden">
+      <div class="profile">
+        <img id="avatar" class="avatar" alt="大頭貼" />
+        <div class="profile-text">
+          <p id="display-name" class="name">—</p>
+          <p id="status-message" class="sub">—</p>
+        </div>
+      </div>
+
+      <dl class="kv">
+        <div><dt>userId</dt><dd id="user-id">—</dd></div>
+        <div><dt>發行時間</dt><dd id="issued-at">—</dd></div>
+      </dl>
+
+      <button id="btn-copy" type="button" class="btn btn-ghost">複製 userId</button>
+
+      <h2 class="sub-title"><span class="dot dot-green"></span>ID token 內容</h2>
+      <p class="hint">
+        以下資料由 <code>liff.getDecodedIDToken()</code> 解出，只在瀏覽器顯示，不會送到任何伺服器。
+      </p>
+      <div class="table-wrap">
+        <table class="token-table">
+          <tbody id="token-body"></tbody>
+        </table>
+      </div>
+
+      <button id="btn-logout" type="button" class="btn btn-ghost btn-danger">登出</button>
+    </section>
+
+    <!-- 4. 環境 -->
+    <section class="card">
+      <h2><span class="dot dot-gray"></span>執行環境</h2>
+      <dl class="kv">
+        <div><dt>LIFF 瀏覽器內</dt><dd id="env-in-client">—</dd></div>
+        <div><dt>作業系統</dt><dd id="env-os">—</dd></div>
+        <div><dt>SDK 版本</dt><dd id="env-version">—</dd></div>
+        <div><dt>目前網址</dt><dd id="env-url">—</dd></div>
+        <div><dt>LIFF ID</dt><dd id="env-liff-id">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- 錯誤 -->
+    <section id="card-error" class="card card-error is-hidden">
+      <h2><span class="dot dot-red"></span><span id="error-title">發生錯誤</span></h2>
+      <p id="error-message"></p>
+      <p id="error-hint" class="hint"></p>
+    </section>
+
+    <footer class="foot">
+      <p>
+        純靜態版本，不含任何 secret。需要 <code>client_secret</code> 的傳統
+        authorization code 流程請看隔壁的 FastAPI 版。
+      </p>
+    </footer>
+  </main>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" charset="utf-8"></script>
+  <script src="./config.js" charset="utf-8"></script>
+  <script src="./app.js" charset="utf-8"></script>
+</body>
+</html>

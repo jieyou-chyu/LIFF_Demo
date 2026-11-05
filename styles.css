@@ -1,0 +1,359 @@
+/* ---------- 基礎 ---------- */
+:root {
+  --line: #06c755;
+  --line-dark: #05a847;
+  --ink: #1b1d22;
+  --ink-2: #5c626d;
+  --ink-3: #8a909b;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --border: #e6e8ec;
+  --danger: #d93a3a;
+  --amber: #e8a33d;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, "Noto Sans TC",
+    "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 0.88em;
+  background: #eef0f3;
+  border-radius: 5px;
+  padding: 1px 5px;
+  word-break: break-all;
+}
+
+/* ---------- 版面 ---------- */
+.shell {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 28px 18px 48px;
+}
+
+.head {
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--line-dark);
+  font-weight: 600;
+}
+
+.head h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+/* ---------- 狀態列 ---------- */
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.pill-ok {
+  color: var(--line-dark);
+  border-color: #bfe9d2;
+  background: #eefaf3;
+}
+
+.pill-bad {
+  color: var(--danger);
+  border-color: #f2cfcf;
+  background: #fdf1f1;
+}
+
+.pill-idle {
+  color: var(--ink-3);
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 2px rgba(20, 24, 32, 0.04);
+}
+
+.card h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.card.is-hidden,
+.is-hidden {
+  display: none !important;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--ink-3);
+}
+
+.dot-green {
+  background: var(--line);
+}
+.dot-amber {
+  background: var(--amber);
+}
+.dot-red {
+  background: var(--danger);
+}
+.dot-gray {
+  background: var(--ink-3);
+}
+
+.card-error {
+  border-color: #f2cfcf;
+  background: #fdf4f4;
+}
+
+.steps {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  color: var(--ink-2);
+}
+
+.steps li {
+  margin-bottom: 8px;
+}
+
+.hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* ---------- 按鈕 ---------- */
+.btn {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  padding: 12px 18px;
+  min-height: 46px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.06s ease, border-color 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-line {
+  width: 100%;
+  background: var(--line);
+  color: #fff;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(6, 199, 85, 0.28);
+}
+
+.btn-line:hover {
+  background: var(--line-dark);
+}
+
+.btn-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  margin-right: 4px;
+  vertical-align: 1px;
+}
+
+.btn-ghost {
+  background: #f2f4f7;
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.btn-ghost:hover {
+  background: #e9ecf1;
+}
+
+.btn-danger {
+  color: var(--danger);
+  margin-top: 18px;
+  width: 100%;
+}
+
+/* ---------- 個人資料 ---------- */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eef0f3;
+  border: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.profile-text {
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sub {
+  margin: 2px 0 0;
+  color: var(--ink-3);
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- key-value ---------- */
+.kv {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.kv > div {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.kv dt {
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+.kv dd {
+  margin: 0;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 12.5px;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.sub-title {
+  margin-top: 24px;
+}
+
+/* ---------- 表格 ---------- */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.token-table tr + tr td {
+  border-top: 1px solid var(--border);
+}
+
+.token-table td {
+  padding: 8px 10px;
+  vertical-align: top;
+  word-break: break-all;
+}
+
+.token-table td:first-child {
+  width: 38%;
+  color: var(--ink-3);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  white-space: nowrap;
+}
+
+/* ---------- 頁尾 ---------- */
+.foot {
+  margin-top: 22px;
+  color: var(--ink-3);
+  font-size: 12.5px;
+}
+
+.foot p {
+  margin: 0;
+}
+
+/* ---------- 小螢幕 ---------- */
+@media (max-width: 420px) {
+  .shell {
+    padding: 22px 14px 40px;
+  }
+  .head h1 {
+    font-size: 25px;
+  }
+  .kv > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
