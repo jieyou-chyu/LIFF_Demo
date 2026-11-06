@@ -166,6 +166,43 @@
     setText("expected-endpoint", endpoint);
   }
 
+  /**
+   * 找出 LIFF ID。順序：
+   * 1. 網址上直接的 ?liffId=
+   * 2. LINE 回跳時參數被包在 ?liff.state= 裡（例：?liff.state=%3FliffId%3D2012349310-AbCdEfgh）
+   * 3. config.js 的 window.LIFF_ID
+   */
+  function resolveLiffId() {
+    var params = new URLSearchParams(location.search);
+
+    var direct = params.get("liffId");
+    if (direct && direct.trim()) return direct.trim();
+
+    var liffState = params.get("liff.state");
+    if (liffState) {
+      var inner = new URLSearchParams(liffState.replace(/^\?/, ""));
+      var nested = inner.get("liffId");
+      if (nested && nested.trim()) return nested.trim();
+    }
+
+    return (window.LIFF_ID || "").trim();
+  }
+
+  /**
+   * 回跳後把 code / state / liff.state 從網址清掉（機密或一次性參數）。
+   * 官方規定要等 liff.init() 的 Promise 完成後才能改網址，所以只在那之後呼叫。
+   */
+  function stripRedirectParams(liffId) {
+    var params = new URLSearchParams(location.search);
+    if (!params.has("code") && !params.has("liff.state")) return;
+
+    var clean = location.origin + location.pathname;
+    if (liffId) clean += "?liffId=" + encodeURIComponent(liffId);
+
+    history.replaceState({}, "", clean);
+    setText("env-url", location.href);
+  }
+
   async function main() {
     setText("env-url", location.href);
     fillExpectedEndpoint();
@@ -184,8 +221,7 @@
     setText("env-version", liff.getVersion());
     setText("env-in-client", liff.isInClient() ? "是（LIFF 瀏覽器）" : "否（外部瀏覽器）");
 
-    var params = new URLSearchParams(location.search);
-    var liffId = (params.get("liffId") || window.LIFF_ID || "").trim();
+    var liffId = resolveLiffId();
 
     if (!liffId) {
       setText("env-liff-id", "（未設定）");
@@ -216,6 +252,8 @@
       "pill-ok"
     );
     setText("env-in-client", liff.isInClient() ? "是（LIFF 瀏覽器）" : "否（外部瀏覽器）");
+
+    stripRedirectParams(liffId);
 
     if (!liff.isLoggedIn()) {
       show($("card-login"));
