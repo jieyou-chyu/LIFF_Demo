@@ -313,6 +313,24 @@
       renderToken(claims);
     }
 
+    // profile 拿不到（多為 LIFF app 的 Scope 沒勾 profile）時，
+    // 至少用 ID token 的 sub 把 userId 顯示出來，不讓整頁空白。
+    if (!profile && claims) {
+      setText("display-name", claims.name || "無法取得顯示名稱");
+      setText("status-message", "LIFF app 少了 profile scope");
+      if (claims.sub) setText("user-id", claims.sub);
+
+      var fallbackAvatar = $("avatar");
+      if (claims.picture) {
+        fallbackAvatar.src = claims.picture;
+      } else {
+        hide(fallbackAvatar);
+      }
+
+      show($("scope-warning"));
+      if (claims.sub) mountCopy(claims.sub);
+    }
+
     $("btn-logout").addEventListener("click", function () {
       liff.logout();
       location.reload();

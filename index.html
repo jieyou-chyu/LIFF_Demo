@@ -59,6 +59,14 @@
 
     <!-- 3. 已登入 -->
     <section id="card-profile" class="card is-hidden">
+      <p id="scope-warning" class="warn is-hidden">
+        <b>這個 LIFF app 的 Scope 少了 <code>profile</code></b>，所以拿不到顯示名稱與頭像
+        （LINE 回的是 <code>FORBIDDEN / The permission is not in LIFF app scope</code>）。
+        到 LINE Developers Console → 這個 channel → <b>LIFF</b> 分頁 → 該 LIFF app →
+        Scope 勾選 <code>profile</code>（順便確認 <code>openid</code>）→ 儲存，
+        然後重新整理這一頁。新增 scope 後會再跳一次授權同意畫面。
+      </p>
+
       <div class="profile">
         <img id="avatar" class="avatar" alt="大頭貼" />
         <div class="profile-text">

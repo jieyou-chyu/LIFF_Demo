@@ -160,6 +160,23 @@ code {
   background: #fdf4f4;
 }
 
+.warn {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid #f0dcb4;
+  border-left: 3px solid var(--amber);
+  border-radius: 10px;
+  background: #fdf8ec;
+  color: #6b5222;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.warn code {
+  background: #f4ecd8;
+  color: #6b5222;
+}
+
 .steps {
   margin: 0 0 12px;
   padding-left: 20px;
