@@ -39,6 +39,19 @@ Web/
 
 ---
 
+## 目前的狀態（已驗證）
+
+| 項目 | 值 |
+| --- | --- |
+| 線上網址 | `https://jieyou-chyu.github.io/LIFF_Demo/` |
+| LIFF ID | `2012349310-iqk3m4y9`（已寫在 `config.js`） |
+| Endpoint URL | `https://jieyou-chyu.github.io/LIFF_Demo/` |
+| Scopes | `openid` + `profile` |
+| 已驗證 | `liff.init()` 通過、`getProfile()` 取得顯示名稱／頭像／userId、`getDecodedIDToken()` 取得完整 claims |
+| 部署 | push 到 `main` 後 GitHub Pages 自動重建（實測約 40–70 秒生效） |
+
+---
+
 ## 部署到 GitHub Pages
 
 這個 repo：`https://github.com/jieyou-chyu/LIFF_Demo`
@@ -108,8 +121,10 @@ https://jieyou-chyu.github.io/LIFF_Demo/?liffId=2012349310-AbCdEfgh
 | --- | --- | --- |
 | 頁面顯示「還缺 LIFF ID」 | `config.js` 沒填 | 填 LIFF ID 或加 `?liffId=` |
 | `liff.init() 失敗`，訊息含 `INVALID_ENDPOINT_URL` | Endpoint URL 與目前網址不是同一前綴 | 把 Endpoint URL 改成目前網址的上層路徑 |
-| 拿不到 profile | Scope 沒勾 `profile` | LIFF 分頁 → Scope 補勾後儲存 |
-| 拿不到 ID token | Scope 沒勾 `openid` | 同上 |
+| `getProfile()` 回 `FORBIDDEN / The permission is not in LIFF app scope` | LIFF app 的 Scope 只有 `openid`，沒有 `profile` | LIFF detail → **Edit** → Scopes 勾 `profile` → Update |
+| **後台已勾 `profile`，重新整理仍是 FORBIDDEN** | access token 的 scope 在**簽發時**就固定，舊 token 不會因為改設定而多出權限 | 頁面按「登出」→ 再按「使用 LINE 登入」重新授權（會多跳一次同意畫面） |
+| 拿不到 ID token | Scope 沒勾 `openid` | 同上，兩個 scope 要一起勾 |
+| 從 LINE 回跳後網址變成 `?liff.state=...&code=...&state=...` | 那是 LIFF 的 primary redirect URL，`liff.state` 把原本參數原封不動帶回 | 正常現象。`app.js` 的 `resolveLiffId()` 會解析 `liff.state`，`init()` 完成後再把 `code`／`state` 清掉 |
 | 桌機開啟一直停在「尚未登入」 | 外部瀏覽器不會自動登入 | 按「使用 LINE 登入」 |
 | 手機點開說找不到頁面 | Pages 還沒部署完 | 等 1–2 分鐘，或看 Actions 紀錄 |
 | 改了檔案但畫面沒變 | 瀏覽器快取 | 強制重新整理（Ctrl+F5） |
